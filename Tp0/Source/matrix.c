@@ -1,7 +1,6 @@
 #include "matrix.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+
 
 // Constructor de matrix_t
 matrix_t* create_matrix(size_t rows, size_t cols){
