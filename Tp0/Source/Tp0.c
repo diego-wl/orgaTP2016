@@ -20,9 +20,9 @@ typedef struct matrix {
 // Constructor de matrix_t
 matrix_t* create_matrix(size_t rows, size_t cols){
 	matrix_t* matrix = (matrix_t*)malloc(sizeof(matrix_t));
-	matrix->rows = 3;
-	matrix->cols = 3;
-	matrix->array = (double*)malloc(sizeof(rows*cols));
+	matrix->rows = rows;
+	matrix->cols = cols;
+	matrix->array = (double*)malloc(sizeof(rows)*sizeof(cols));
 	return matrix;
 }
 
@@ -61,18 +61,37 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 
 int main(void) {
 	size_t n = 3;
-	matrix_t* matrix = create_matrix(n,n);
-	matrix->array[0]=1;
-	matrix->array[1]=2;
-	matrix->array[2]=3;
+	matrix_t* matrix_a = create_matrix(n,n);
+	matrix_t* matrix_b = create_matrix(n,n);
 
-	matrix->array[3]=4;
-	matrix->array[4]=5;
-	matrix->array[5]=6;
+	//initialize matrix a
+	matrix_a->array[0]=1;
+	matrix_a->array[1]=2;
+	matrix_a->array[2]=3;
 
-	matrix->array[6]=7;
-	matrix->array[7]=8;
-	matrix->array[8]=9;
+	matrix_a->array[3]=4;
+	matrix_a->array[4]=5;
+	matrix_a->array[5]=6;
+
+	matrix_a->array[6]=7;
+	matrix_a->array[7]=8;
+	matrix_a->array[8]=9;
+
+	//initialize matrix b
+	matrix_b->array[0]=10;
+	matrix_b->array[1]=11;
+	matrix_b->array[2]=12;
+
+	matrix_b->array[3]=13;
+	matrix_b->array[4]=14;
+	matrix_b->array[5]=15;
+
+	matrix_b->array[6]=16;
+	matrix_b->array[7]=17;
+	matrix_b->array[8]=18;
+
+	//a * b
+	matrix_t* matrix_c = create_matrix(matrix_a,matrix_b);
 
 	puts("tp---taller"); /* prints tp---taller */
 	return EXIT_SUCCESS;
