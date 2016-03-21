@@ -10,10 +10,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "matrix.h"
 
 
 int main(int argc, char **argv) {
+
+	if ((strcmp(argv[1],"-h") == 0) || (strcmp(argv[1],"--help") == 0)){
+		show_help();
+		return 0;
+	}else if ((strcmp(argv[1],"-V") == 0) || (strcmp(argv[1],"--version") == 0)){
+		show_version();
+		return 0;
+	}
+
 	size_t n = 3;
 	matrix_t* matrix_a = create_matrix(n,n);
 	matrix_t* matrix_b = create_matrix(n,n);
@@ -49,4 +59,23 @@ int main(int argc, char **argv) {
 
 	puts("tp---taller"); /* prints tp---taller */
 	return EXIT_SUCCESS;
+}
+
+
+void show_help(){
+	printf("Usage:\n");
+	printf("\t tp0 -h \n");
+	printf("\t tp0 -V \n");
+	printf("\t tp0 < in_file > out_file \n");
+	printf("Options:\n");
+	printf("\t -V, --version \t Print version and quit. \n");
+	printf("\t -h, --help \t Print this information and quit. \n");
+	printf("Examples:\n");
+	printf("\t tp0 < in.txt > out.txt \n");
+	printf("\t cat in.txt | tp0 > out.txt \n");
+
+}
+
+void show_version(){
+	printf("version xx \n");
 }
