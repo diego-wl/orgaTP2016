@@ -59,7 +59,7 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	return result;
 }
 
-int main(void) {
+int main(int argc, char **argv) {
 	size_t n = 3;
 	matrix_t* matrix_a = create_matrix(n,n);
 	matrix_t* matrix_b = create_matrix(n,n);
