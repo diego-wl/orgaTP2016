@@ -29,6 +29,8 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m){
+	free(m->array);
+	free(m);
 
 }
 
@@ -36,10 +38,12 @@ void destroy_matrix(matrix_t* m){
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
 	int i = 0;
-	for(i; i<(m->cols)*(m->cols); i++){
-		printf("index: %d, value: %f \n",i,m->array[i]);
+	fprintf(fp,"%d ",(int)(m->cols));
+	while (i<(m->cols)*(m->cols)){
+		fprintf(fp,"%f ",m->array[i]);
+		i++;
 	}
-
+	fprintf(fp,"\n");
 	return 0;
 }
 
@@ -84,9 +88,14 @@ void show_version(){
 	printf("version xx \n");
 }
 
-int leerTamanio(){
+int leerTamanio(int* cont){
 	int n;
-	scanf("%d", &n);
+	int resp;
+	resp = scanf("%d", &n);
+	if (resp == EOF){
+		*cont=0;
+		return 0;
+	};
 	return n;
 }
 
@@ -143,7 +152,7 @@ void fillMatrix(int tam, matrix_t *matrix){
 				   sscanf(token, "%g", &d);
 
 				   matrix->array[i]=d;
-				   printf("index: %d, value: %g\n",i, d );
+				   //printf("index: %d, value: %g\n",i, d );
 				   i++;
 				   free(token);
 				   if (i != (tam*tam)){
@@ -167,9 +176,11 @@ int main(int argc, char **argv) {
 
 	matrix_t* matrix_a;
 	matrix_t* matrix_b;
-	int i = 0;
-	while(i!=1){
-		size_t n = leerTamanio();
+	matrix_t* matrix_c;
+	int continuar = 1;
+	size_t n = leerTamanio(&continuar);
+	while(continuar){
+
 		//printf("carga matrix A \n");
 		//printf("tamanio matrix: %d \n", (int)n );
 		matrix_a = create_matrix(n,n);
@@ -185,13 +196,20 @@ int main(int argc, char **argv) {
 		fillMatrix(n,matrix_b);
 
 		//printf("mostrar matriz A \n");
-		print_matrix(stdin, matrix_a);
+		print_matrix(stdout, matrix_a);
 		//printf("mostrar matriz B \n");
-		print_matrix(stdin, matrix_b);
+		print_matrix(stdout, matrix_b);
 		//printf("mostrar matriz C \n");
-		matrix_t* matrix_c = matrix_multiply(matrix_a,matrix_b);
-		print_matrix(stdin, matrix_c);
-		i++;
+		matrix_c = matrix_multiply(matrix_a,matrix_b);
+		print_matrix(stdout, matrix_c);
+		printf("limpia A \n");
+		destroy_matrix(matrix_a);
+		printf("limpia B \n");
+		destroy_matrix(matrix_b);
+		printf("limpia C \n");
+		destroy_matrix(matrix_c);
+
+		n = leerTamanio(&continuar);
 	}
 
 
