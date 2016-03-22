@@ -29,9 +29,11 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m){
+	printf("init destroy \n");
 	free(m->array);
+	printf("destroy array \n");
 	free(m);
-
+	printf("destroy matrix \n");
 }
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
@@ -141,10 +143,8 @@ char* readString(){
 void fillMatrix(int tam, matrix_t *matrix){
 
 		   char *token;
-		   /* get the first token */
 
 		   int i = 0;
-		   /* walk through other tokens */
 			   token = readString();
 			   while ((token != NULL) && (i < (tam*tam))){
 				   //printf("token: %s \n", token );
@@ -158,7 +158,6 @@ void fillMatrix(int tam, matrix_t *matrix){
 				   if (i != (tam*tam)){
 					   token = readString();
 				   }
-
 			   }
 }
 
