@@ -23,19 +23,28 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	matrix->rows = rows;
 	matrix->cols = cols;
 	matrix->array = (double*)malloc(sizeof(rows)*sizeof(cols));
-	//TODO con strcpy inicializar los valores del array en 0
 	return matrix;
 }
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m){
-
+	free(m->array);
+	free(m);
 }
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
-
+	fp = fopen("result.txt","w");
+	if( fp == NULL ){
+		return 1;
+	}
+	int index = 0;
+	for(index = 0; index < (m->cols * m->rows); index++){
+		fprintf(fp,"%f ",m->array[index]);
+	}
+	fclose(fp);
+	return 0;
 }
 
 // Multiplica las matrices en m1 y m2
@@ -62,6 +71,25 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 }
 
 int main(void) {
-	puts("tp---taller"); /* prints tp---taller */
+	matrix_t* m1 = create_matrix(2,2);
+	matrix_t* m2 = create_matrix(2,2);
+	FILE* pf;
+
+	m1->array[0] =1;
+	m1->array[1] =2;
+	m1->array[2] =3;
+	m1->array[3] =4;
+
+	m2->array[0]=5;
+	m2->array[1]=6;
+	m2->array[2]=7;
+	m2->array[3]=8;
+
+	matrix_t* m3 = matrix_multiply(m1,m2);
+	print_matrix(pf,m3);
+	destroy_matrix(m1);
+	destroy_matrix(m2);
+	destroy_matrix(m3);
+
 	return EXIT_SUCCESS;
 }
