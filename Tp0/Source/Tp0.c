@@ -13,55 +13,6 @@
 #include <string.h>
 #include "matrix.h"
 
-
-int main(int argc, char **argv) {
-
-	if ((strcmp(argv[1],"-h") == 0) || (strcmp(argv[1],"--help") == 0)){
-		show_help();
-		return 0;
-	}else if ((strcmp(argv[1],"-V") == 0) || (strcmp(argv[1],"--version") == 0)){
-		show_version();
-		return 0;
-	}
-
-	size_t n = 3;
-	matrix_t* matrix_a = create_matrix(n,n);
-	matrix_t* matrix_b = create_matrix(n,n);
-
-	//initialize matrix a
-	matrix_a->array[0]=1;
-	matrix_a->array[1]=2;
-	matrix_a->array[2]=3;
-
-	matrix_a->array[3]=4;
-	matrix_a->array[4]=5;
-	matrix_a->array[5]=6;
-
-	matrix_a->array[6]=7;
-	matrix_a->array[7]=8;
-	matrix_a->array[8]=9;
-
-	//initialize matrix b
-	matrix_b->array[0]=10;
-	matrix_b->array[1]=11;
-	matrix_b->array[2]=12;
-
-	matrix_b->array[3]=13;
-	matrix_b->array[4]=14;
-	matrix_b->array[5]=15;
-
-	matrix_b->array[6]=16;
-	matrix_b->array[7]=17;
-	matrix_b->array[8]=18;
-
-	//a * b
-	matrix_t* matrix_c = create_matrix(matrix_a,matrix_b);
-
-	puts("tp---taller"); /* prints tp---taller */
-	return EXIT_SUCCESS;
-}
-
-
 void show_help(){
 	printf("Usage:\n");
 	printf("\t tp0 -h \n");
@@ -79,3 +30,119 @@ void show_help(){
 void show_version(){
 	printf("version xx \n");
 }
+
+int leerTamanio(){
+	int n;
+	scanf("%d", &n);
+	return n;
+}
+
+char* readString(){
+    char c;
+    char *string;
+    int x;
+    int continuar = 1;
+    c = getchar();
+    while (c == 32){
+    	c = getchar();
+    }
+    if(c != 10){
+    	x = (strlen(&c)+1);
+    	char aux[1];
+    	aux[0] = c;
+    	aux[1] = '\0';
+    	string = (char*) malloc((strlen(aux)+1)*sizeof(char));
+    	strcpy(string, aux);
+    	//putchar(c);
+    }else{
+    	return NULL;
+    }
+    do{
+        c = getchar();
+        if((c != 32)&&(c != 10)){//space
+            x++;
+        	char aux[1];
+        	aux[0] = c;
+        	aux[1] = '\0';
+            string = (char*)realloc(string, (strlen(string)+strlen(aux)+1)*sizeof(char));
+            strcat(string, aux);
+            //putchar(c);
+        }else{
+        	continuar = 0;
+        };
+    }while(continuar);
+    //printf("string: %s \n", string );
+    return string;
+
+};
+
+void fillMatrix(int tam, matrix_t *matrix){
+
+		   char *token;
+		   /* get the first token */
+
+		   int i = 0;
+		   /* walk through other tokens */
+			   token = readString();
+			   while ((token != NULL) && (i < (tam*tam))){
+				   //printf("token: %s \n", token );
+				   float d;
+				   sscanf(token, "%g", &d);
+
+				   matrix->array[i]=d;
+				   printf("index: %d, value: %g\n",i, d );
+				   i++;
+				   free(token);
+				   if (i != (tam*tam)){
+					   token = readString();
+				   }
+
+			   }
+}
+
+int main(int argc, char **argv) {
+
+	if (argc>1){
+		if ((strcmp(argv[1],"-h") == 0) || (strcmp(argv[1],"--help") == 0)){
+			show_help();
+			return 0;
+		}else if ((strcmp(argv[1],"-V") == 0) || (strcmp(argv[1],"--version") == 0)){
+			show_version();
+			return 0;
+		}
+	}
+
+	matrix_t* matrix_a;
+	matrix_t* matrix_b;
+	int i = 0;
+	while(i!=1){
+		size_t n = leerTamanio();
+		//printf("carga matrix A \n");
+		//printf("tamanio matrix: %d \n", (int)n );
+		matrix_a = create_matrix(n,n);
+
+		//printf("carga matrix B \n");
+		//printf("tamanio matrix: %d \n", (int)n );
+		matrix_b = create_matrix(n,n);
+
+		//printf("llenar matriz A \n");
+		fillMatrix(n,matrix_a);
+
+		//printf("llenar matriz B \n");
+		fillMatrix(n,matrix_b);
+
+		//printf("mostrar matriz A \n");
+		print_matrix(stdin, matrix_a);
+		//printf("mostrar matriz B \n");
+		print_matrix(stdin, matrix_b);
+		//printf("mostrar matriz C \n");
+		matrix_t* matrix_c = matrix_multiply(matrix_a,matrix_b);
+		print_matrix(stdin, matrix_c);
+		i++;
+	}
+
+
+	return EXIT_SUCCESS;
+}
+
+

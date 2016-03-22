@@ -19,6 +19,11 @@ void destroy_matrix(matrix_t* m){
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m){
+	int i = 0;
+	for(i; i<(m->cols)*(m->cols); i++){
+		printf("index: %d, value: %f \n",i,m->array[i]);
+	}
+
 	return 0;
 }
 
@@ -30,7 +35,8 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	int index = 0;
 	matrix_t* result = create_matrix(m1->rows,m1->cols);
 
-	for( m1_index = 0; m1_index < m1->cols * m1->rows; ){
+	for( m1_index = 0; m1_index <= m1->rows * m1->cols; ){
+		m1_index = (index / m1->cols) * m1->rows;
 		for( m2_aux = 0; m2_aux < m2->rows; ){
 			result->array[index] += m1->array[m1_index] * m2->array[m2_index];
 			m2_aux++;
@@ -38,7 +44,7 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 			m2_index += m2->rows;
 		}
 		index++;
-		m1_index = index / m1->cols;
+		m2_index = index % m2->cols;
 		m2_aux = 0;
 	}
 	return result;
