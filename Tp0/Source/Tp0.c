@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct matrix {
 	size_t rows;
@@ -22,7 +23,7 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	matrix_t* matrix = (matrix_t*)malloc(sizeof(matrix_t));
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = (double*)malloc(sizeof(rows)*sizeof(cols));
+	matrix->array = (double*)malloc(rows*cols*sizeof(double));
 	return matrix;
 }
 
@@ -70,20 +71,57 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 	return result;
 }
 
-int main(void) {
-	matrix_t* m1 = create_matrix(2,2);
-	matrix_t* m2 = create_matrix(2,2);
+double* tokenize(char* buf){
+	char* token = strtok(buf," ");
+	int dimension = atoi(token);
+	int index = 0;
+	double* values = (double*)malloc(dimension*dimension*sizeof(double));
+
+	while( (token = strtok(NULL," ")) ){
+		values[index] = atof(token);
+		index++;
+	}
+	return values;
+}
+
+void loadData(matrix_t* m1,matrix_t* m2, double* values){
+
+}
+
+int main(int argc, char* argv[]) {
+	matrix_t* m1 = create_matrix(3,3);
+	matrix_t* m2 = create_matrix(3,3);
 	FILE* pf;
+	char buf[] ="2 1 2 3 4 5 6 7 8";
 
-	m1->array[0] =1;
-	m1->array[1] =2;
-	m1->array[2] =3;
-	m1->array[3] =4;
+	double* matrixData = tokenize(buf);
 
-	m2->array[0]=5;
-	m2->array[1]=6;
-	m2->array[2]=7;
-	m2->array[3]=8;
+
+	//set m1 data
+	m1->array[0] = 1;
+	m1->array[1] = 2;
+	m1->array[2] = 3;
+
+	m1->array[3] = 4;
+	m1->array[4] = 5;
+	m1->array[5] = 6;
+
+	m1->array[6] = 7;
+	m1->array[7] = 8;
+	m1->array[8] = 9;
+
+	//set m2 data
+	m2->array[0]= 5;
+	m2->array[1]= 6;
+	m2->array[2]= 7;
+
+	m2->array[3]= 8;
+	m2->array[4]= 9;
+	m2->array[5]= 10;
+
+	m2->array[6]= 11;
+	m2->array[7]= 12;
+	m2->array[8]= 13;
 
 	matrix_t* m3 = matrix_multiply(m1,m2);
 	print_matrix(pf,m3);
