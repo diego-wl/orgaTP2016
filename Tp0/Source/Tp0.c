@@ -23,7 +23,7 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 	matrix_t* matrix = (matrix_t*)malloc(sizeof(matrix_t));
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = (double*)malloc(sizeof(rows)*sizeof(cols));
+	matrix->array = (double*)malloc(rows * cols * sizeof(double));
 	return matrix;
 }
 
