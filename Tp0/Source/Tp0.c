@@ -120,7 +120,7 @@ char* readString(int* errRead){
     	return NULL;
     }else{
     	*errRead = 1;
-    	fprintf(stderr,"Lectura de varacter no valido. Linea: %d\n",cantProcesos);
+    	fprintf(stderr,"Lectura de caracter no valido. Linea: %d\n",cantProcesos);
     	return NULL;
     };
     do{
@@ -135,7 +135,7 @@ char* readString(int* errRead){
         	continuar = 0;
         }else{
         	*errRead = 1;
-        	fprintf(stderr,"Lectura de varacter no valido. Linea: %d\n",cantProcesos);
+        	fprintf(stderr,"Lectura de caracter no valido. Linea: %d\n",cantProcesos);
         	free(string);
         	return NULL;
         };
@@ -200,6 +200,7 @@ int main(int argc, char **argv) {
 		if (matrix_a != NULL) { destroy_matrix(matrix_a); };
 		if (matrix_b != NULL) { destroy_matrix(matrix_b); };
 
+		cantProcesos++;
 		if (!err){
 			n = leerTamanio(&continuar, &err);
 		}
