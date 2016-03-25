@@ -1,12 +1,3 @@
-/*
- ============================================================================
- Name        : Tp0.c
- Author      : Jorge
- Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
- ============================================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,13 +22,10 @@ matrix_t* create_matrix(size_t rows, size_t cols){
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m){
-	//printf("init destroy \n");
 	free(m->array);
 	m->array = NULL;
-	//printf("destroy array \n");
 	free(m);
 	m=NULL;
-	//printf("destroy matrix \n");
 }
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
@@ -198,80 +186,24 @@ int main(int argc, char **argv) {
 	int err = 0;
 	size_t n = leerTamanio(&continuar,&err);
 	while(continuar && !err){
-
-		//printf("carga matrix A \n");
-		//printf("tamanio matrix: %d \n", (int)n );
 		matrix_a = create_matrix(n,n);
-
-		//printf("carga matrix B \n");
-		//printf("tamanio matrix: %d \n", (int)n );
 		matrix_b = create_matrix(n,n);
-		//printf("paso 1 \n");
-		//printf("llenar matriz A \n");
 		fillMatrix(n,matrix_a, &err);
-		//printf("paso 2 \n");
 		if (!err){
-			//printf("paso 3 \n");
-			//printf("llenar matriz B \n");
 			fillMatrix(n,matrix_b, &err);
 		}
-		//printf("mostrar matriz A \n");
-		//print_matrix(stdout, matrix_a);
-		//printf("mostrar matriz B \n");
-		//print_matrix(stdout, matrix_b);
-		//printf("mostrar matriz C \n");
 		if (!err){
-			//printf("paso 4 \n");
-			//printf("puntero c: %p \n", matrix_c);
-			//printf("puntero array c: %p \n", matrix_c->array);
 			matrix_c = matrix_multiply(matrix_a,matrix_b);
-			//printf("paso 5 \n");
-			//printf("puntero c: %p \n", matrix_c);
-			//printf("puntero array c: %p \n", matrix_c->array);
 			print_matrix(stdout, matrix_c);
-			//printf("paso 6 \n");
-			//printf("limpia C \n");
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
 		}
-		//printf("paso 7 \n");
-		//printf("limpia A \n");
 		if (matrix_a != NULL) { destroy_matrix(matrix_a); };
-		//printf("paso 8 \n");
-		//printf("limpia B \n");
 		if (matrix_b != NULL) { destroy_matrix(matrix_b); };
 
 		if (!err){
 			n = leerTamanio(&continuar, &err);
 		}
 	}
-
-//	m1->array[3] = 4;
-//	m1->array[4] = 5;
-//	m1->array[5] = 6;
-//
-//	m1->array[6] = 7;
-//	m1->array[7] = 8;
-//	m1->array[8] = 9;
-//
-//	//set m2 data
-//	m2->array[0]= 5;
-//	m2->array[1]= 6;
-//	m2->array[2]= 7;
-//
-//	m2->array[3]= 8;
-//	m2->array[4]= 9;
-//	m2->array[5]= 10;
-//
-//	m2->array[6]= 11;
-//	m2->array[7]= 12;
-//	m2->array[8]= 13;
-//
-//	matrix_t* m3 = matrix_multiply(m1,m2);
-//	print_matrix(pf,m3);
-//	destroy_matrix(m1);
-//	destroy_matrix(m2);
-//	destroy_matrix(m3);
-
 	return EXIT_SUCCESS;
 }
 
