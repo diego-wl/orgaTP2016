@@ -73,7 +73,6 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
 			m1_index++;
 			m2_index += m2->rows;
 		}
-		//fprintf(stdout,"matriz c, index: %d, valor: %f",index,result->array[index]);
 		index++;
 		m2_index = index % m2->cols;
 		m2_aux = 0;
