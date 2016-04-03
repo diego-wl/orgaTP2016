@@ -8,20 +8,21 @@ int cantProcesos = 1;
 typedef struct matrix {
 	size_t rows;
 	size_t cols;
-	double* array;
+	double *array;
 } matrix_t;
 
 // Constructor de matrix_t
-matrix_t* create_matrix(size_t rows, size_t cols){
-	matrix_t* matrix = (matrix_t*)malloc(sizeof(matrix_t));
+matrix_t* create_matrix(size_t rows, size_t cols) {
+	matrix_t* matrix = malloc(sizeof(matrix_t));
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = (double*)malloc(rows*cols*sizeof(double));
+	matrix->array = malloc(rows * cols * sizeof(double) + 4);
 	return matrix;
 }
 
 // Destructor de matrix_t
-void destroy_matrix(matrix_t* m){
+void destroy_matrix(matrix_t* m) {
+	//printf("init destroy \n");
 	free(m->array);
 	m->array = NULL;
 	free(m);
@@ -30,32 +31,29 @@ void destroy_matrix(matrix_t* m){
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
-int print_matrix(FILE* fp, matrix_t* m){
+int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
-	fprintf(fp,"%d ",(int)(m->cols));
-	while (i<(m->cols)*(m->cols)){
-		double value;
-		value = m->array[i];
-		fprintf(fp,"%f ",value);
+	fprintf(fp, "%d ", (int) (m->cols));
+	while (i < (m->cols) * (m->cols)) {
+		fprintf(fp, "%f ", m->array[i]);
 		i++;
 	}
-	fprintf(fp,"\n");
+	fprintf(fp, "\n");
 	return 0;
 }
 
 // Multiplica las matrices en m1 y m2
-matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2){
+matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
 	int m1_index = 0;
 	int m2_index = 0;
 	int m2_aux = 0;
 	int index = 0;
-	matrix_t* result = create_matrix(m1->rows,m1->cols);
+	matrix_t* result = create_matrix(m1->rows, m1->cols);
 
-
-	for( m1_index = 0; m1_index <= m1->rows * m1->cols; ){
+	for (m1_index = 0; m1_index <= m1->rows * m1->cols;) {
 		m1_index = (index / m1->cols) * m1->rows;
 		result->array[index]=0;
-		for( m2_aux = 0; m2_aux < m2->rows; ){
+		for (m2_aux = 0; m2_aux < m2->rows;) {
 			result->array[index] += m1->array[m1_index] * m2->array[m2_index];
 			m2_aux++;
 			m1_index++;
@@ -86,7 +84,7 @@ void show_version(){
 }
 
 
-int leerTamanio(int* cont, int* err){
+int leerTamanio(int* cont, int* err) {
 	int n=0;
 	int resp;
 	resp = scanf("%d", &n);
@@ -102,7 +100,7 @@ int leerTamanio(int* cont, int* err){
 	return n;
 }
 
-char* readString(int* errRead){
+char* readString(int* errRead) {
     char c;
     char *string;
     int continuar = 1;
@@ -144,7 +142,7 @@ char* readString(int* errRead){
 }
 
 
-void fillMatrix(int tam, matrix_t *matrix, int* err){
+void fillMatrix(int tam, matrix_t *matrix, int* err) {
 		   char *token;
 		   int i = 0;
 		   int errFill = 0;
@@ -160,17 +158,21 @@ void fillMatrix(int tam, matrix_t *matrix, int* err){
 					   token = readString(&errFill);
 				   }
 			   }
+			   if ((token == NULL) && (i < (tam*tam))) {
+				   fprintf(stderr,"Cantidad incorrecta de parametros para matriz de dimension %d. Linea: %d\n", tam, cantProcesos);
+				   errFill = 1;
+			   }
 			   if (errFill){ *err = errFill; };
-
 }
 
 int main(int argc, char **argv) {
 
-	if (argc>1){
-		if ((strcmp(argv[1],"-h") == 0) || (strcmp(argv[1],"--help") == 0)){
+	if (argc > 1) {
+		if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0)) {
 			show_help();
 			return 0;
-		}else if ((strcmp(argv[1],"-V") == 0) || (strcmp(argv[1],"--version") == 0)){
+		} else if ((strcmp(argv[1], "-V") == 0)
+				|| (strcmp(argv[1], "--version") == 0)) {
 			show_version();
 			return 0;
 		}else{
