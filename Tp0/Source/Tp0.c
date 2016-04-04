@@ -1,16 +1,9 @@
-/*
- ============================================================================
- Name        : Tp0.c
- Author      : Jorge
- Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
- ============================================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+int cantProcesos = 1;
 
 typedef struct matrix {
 	size_t rows;
@@ -29,11 +22,11 @@ matrix_t* create_matrix(size_t rows, size_t cols) {
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m) {
-	printf("init destroy \n");
+	//printf("init destroy \n");
 	free(m->array);
-	printf("destroy array \n");
+	m->array = NULL;
 	free(m);
-	printf("destroy matrix \n");
+	m=NULL;
 }
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
@@ -59,6 +52,7 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
 
 	for (m1_index = 0; m1_index <= m1->rows * m1->cols;) {
 		m1_index = (index / m1->cols) * m1->rows;
+		result->array[index]=0;
 		for (m2_aux = 0; m2_aux < m2->rows;) {
 			result->array[index] += m1->array[m1_index] * m2->array[m2_index];
 			m2_aux++;
@@ -85,94 +79,90 @@ void show_help(){
 	printf("\t cat in.txt | tp0 > out.txt \n");
 }
 
-//double* tokenize(char* buf){
-//	char* token = strtok(buf," ");
-//	int dimension = atoi(token);
-//	int index = 0;
-//	double* values = (double*)malloc(dimension*dimension*sizeof(double));
-
-//	while( (token = strtok(NULL," ")) ){
-//		values[index] = atof(token);
-//		index++;
-//	}
-//	return values;
-//}
-
 void show_version(){
 	printf("version xx \n");
 }
 
-//void loadData(matrix_t* m1,matrix_t* m2, double* values){
-//}
 
-int leerTamanio(int* cont) {
-	int n;
+int leerTamanio(int* cont, int* err) {
+	int n=0;
 	int resp;
 	resp = scanf("%d", &n);
-	if (resp == EOF) {
-		*cont = 0;
+
+	if (resp == EOF){
+		*cont=0;
+		return 0;
+	}else if (n <= 0){
+		*err = 1;
+		fprintf(stderr, "no se pudo obtener tamañio de matrix. Fila: %d\n",cantProcesos);
 		return 0;
 	};
 	return n;
 }
 
-char* readString() {
-	char c;
-	char *string;
-	int x;
-	int continuar = 1;
-	c = getchar();
-	while (c == 32) {
-		c = getchar();
-	}
-	if (c != 10) {
-		x = (strlen(&c) + 1);
-		char aux[1];
-		aux[0] = c;
-		aux[1] = '\0';
-		string = (char*) malloc((strlen(aux) + 1) * sizeof(char));
-		strcpy(string, aux);
-		//putchar(c);
-	} else {
-		return NULL;
-	}
-	do {
-		c = getchar();
-		if ((c != 32) && (c != 10)) { //space
-			x++;
-			char aux[1];
-			aux[0] = c;
-			aux[1] = '\0';
-			string = (char*) realloc(string,
-					(strlen(string) + strlen(aux) + 1) * sizeof(char));
-			strcat(string, aux);
-			//putchar(c);
-		} else {
-			continuar = 0;
-		};
-	} while (continuar);
-	//printf("string: %s \n", string );
-	return string;
+char* readString(int* errRead) {
+    char c;
+    char *string;
+    int continuar = 1;
+    c = getchar();
+    while (c == 32){
+    	c = getchar();
+    }
+    if ((c>=48 && c<=57) || (c>=45 && c<=46)){
+    	char aux[1];
+    	aux[0] = c;
+    	aux[1] = '\0';
+    	string = (char*) malloc((strlen(aux)+1)*sizeof(char));
+    	strcpy(string, aux);
+    }else if(c == 10){
+    	return NULL;
+    }else{
+    	*errRead = 1;
+    	fprintf(stderr,"Lectura de caracter no valido. Linea: %d\n",cantProcesos);
+    	return NULL;
+    };
+    do{
+        c = getchar();
+        if ((c>=48 && c<=57) || (c>=45 && c<=46)){
+        	char aux[1];
+        	aux[0] = c;
+        	aux[1] = '\0';
+            string = (char*)realloc(string, (strlen(string)+strlen(aux)+1)*sizeof(char));
+            strcat(string, aux);
+        }else if ((c == 32) || (c == 10)){
+        	continuar = 0;
+        }else{
+        	*errRead = 1;
+        	fprintf(stderr,"Lectura de caracter no valido. Linea: %d\n",cantProcesos);
+        	free(string);
+        	return NULL;
+        };
+    }while(continuar);
+    return string;
 }
 
 
-void fillMatrix(int tam, matrix_t *matrix) {
-	char *token;
-	int i = 0;
-	token = readString();
-	while ((token != NULL) && (i < (tam * tam))) {
-		//printf("token: %s \n", token );
-		float d;
-		sscanf(token, "%g", &d);
+void fillMatrix(int tam, matrix_t *matrix, int* err) {
+		   char *token;
+		   int i = 0;
+		   int errFill = 0;
+			   token = readString(&errFill);
+			   while ((token != NULL) && (i < (tam*tam)) && !errFill){
+				   float d;
+				   sscanf(token, "%g", &d);
 
-		matrix->array[i] = d;
-		//printf("index: %d, value: %g\n",i, d );
-		i++;
-		free(token);
-		if (i != (tam * tam)) {
-			token = readString();
-		}
-	}
+				   matrix->array[i]=d;
+				   i++;
+				   free(token);
+				   if (i != (tam*tam)){
+					   token = readString(&errFill);
+				   }
+			   }
+			   if ((token == NULL) && (i < (tam*tam))) {
+				   fprintf(stderr,"Cantidad incorrecta de parametros para matriz de dimension %d. Linea: %d\n", tam, cantProcesos);
+				   errFill = 1;
+			   }
+			   if (errFill){ *err = errFill; };
 }
 
 int main(int argc, char **argv) {
@@ -185,77 +175,38 @@ int main(int argc, char **argv) {
 				|| (strcmp(argv[1], "--version") == 0)) {
 			show_version();
 			return 0;
+		}else{
+			printf("Paramatro incorrecto. Ingrese -h para ayuda.\n");
+			return 0;
+		};
+	}
+
+	matrix_t* matrix_a=NULL;
+	matrix_t* matrix_b=NULL;
+	matrix_t* matrix_c=NULL;
+	int continuar = 1;
+	int err = 0;
+	size_t n = leerTamanio(&continuar,&err);
+	while(continuar && !err){
+		matrix_a = create_matrix(n,n);
+		matrix_b = create_matrix(n,n);
+		fillMatrix(n,matrix_a, &err);
+		if (!err){
+			fillMatrix(n,matrix_b, &err);
+		}
+		if (!err){
+			matrix_c = matrix_multiply(matrix_a,matrix_b);
+			print_matrix(stdout, matrix_c);
+			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
+		}
+		if (matrix_a != NULL) { destroy_matrix(matrix_a); };
+		if (matrix_b != NULL) { destroy_matrix(matrix_b); };
+
+		cantProcesos++;
+		if (!err){
+			n = leerTamanio(&continuar, &err);
 		}
 	}
-
-	matrix_t* matrix_a;
-	matrix_t* matrix_b;
-	matrix_t* matrix_c;
-	int continuar = 1;
-	size_t n = leerTamanio(&continuar);
-	while (continuar) {
-
-		//printf("carga matrix A \n");
-		//printf("tamanio matrix: %d \n", (int)n );
-		matrix_a = create_matrix(n, n);
-
-		//printf("carga matrix B \n");
-		//printf("tamanio matrix: %d \n", (int)n );
-		matrix_b = create_matrix(n, n);
-
-		//printf("llenar matriz A \n");
-		fillMatrix(n, matrix_a);
-
-		//printf("llenar matriz B \n");
-		fillMatrix(n, matrix_b);
-
-		//printf("mostrar matriz A \n");
-		print_matrix(stdout, matrix_a);
-		//printf("mostrar matriz B \n");
-		print_matrix(stdout, matrix_b);
-		//printf("mostrar matriz C \n");
-		matrix_c = matrix_multiply(matrix_a, matrix_b);
-		print_matrix(stdout, matrix_c);
-
-		printf("limpia A \n");
-		destroy_matrix(matrix_a);
-
-		printf("limpia B \n");
-		destroy_matrix(matrix_b);
-
-		printf("limpia C \n");
-		destroy_matrix(matrix_c);
-
-		n = leerTamanio(&continuar);
-	}
-
-//	m1->array[3] = 4;
-//	m1->array[4] = 5;
-//	m1->array[5] = 6;
-//
-//	m1->array[6] = 7;
-//	m1->array[7] = 8;
-//	m1->array[8] = 9;
-//
-//	//set m2 data
-//	m2->array[0]= 5;
-//	m2->array[1]= 6;
-//	m2->array[2]= 7;
-//
-//	m2->array[3]= 8;
-//	m2->array[4]= 9;
-//	m2->array[5]= 10;
-//
-//	m2->array[6]= 11;
-//	m2->array[7]= 12;
-//	m2->array[8]= 13;
-//
-//	matrix_t* m3 = matrix_multiply(m1,m2);
-//	print_matrix(pf,m3);
-//	destroy_matrix(m1);
-//	destroy_matrix(m2);
-//	destroy_matrix(m3);
-
 	return EXIT_SUCCESS;
 }
 
