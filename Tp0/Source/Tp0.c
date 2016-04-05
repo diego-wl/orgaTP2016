@@ -22,7 +22,6 @@ matrix_t* create_matrix(size_t rows, size_t cols) {
 
 // Destructor de matrix_t
 void destroy_matrix(matrix_t* m) {
-	//printf("init destroy \n");
 	free(m->array);
 	m->array = NULL;
 	free(m);
@@ -105,16 +104,16 @@ char* readString(int* errRead) {
     char *string;
     int continuar = 1;
     c = getchar();
-    while (c == 32){
+    while (c == 32){ // blank
     	c = getchar();
     }
-    if ((c>=48 && c<=57) || (c>=45 && c<=46)){
+    if ((c>=48 && c<=57) || (c>=45 && c<=46) || (c==43) || (c==101)){ //numeros | - | . | + | e |
     	char aux[1];
     	aux[0] = c;
     	aux[1] = '\0';
     	string = (char*) malloc((strlen(aux)+1)*sizeof(char));
     	strcpy(string, aux);
-    }else if(c == 10){
+    }else if(c == 10){ // newline
     	return NULL;
     }else{
     	*errRead = 1;
@@ -123,7 +122,7 @@ char* readString(int* errRead) {
     };
     do{
         c = getchar();
-        if ((c>=48 && c<=57) || (c>=45 && c<=46)){
+        if ((c>=48 && c<=57) || (c>=45 && c<=46) || (c==43) || (c==101)){
         	char aux[1];
         	aux[0] = c;
         	aux[1] = '\0';
@@ -145,14 +144,20 @@ char* readString(int* errRead) {
 void fillMatrix(int tam, matrix_t *matrix, int* err) {
 		   char *token;
 		   int i = 0;
+		   int validNumber = 0;
 		   int errFill = 0;
 			   token = readString(&errFill);
 			   while ((token != NULL) && (i < (tam*tam)) && !errFill){
 				   float d;
-				   sscanf(token, "%g", &d);
-
-				   matrix->array[i]=d;
-				   i++;
+				   validNumber = 0;
+				   validNumber = sscanf(token, "%g", &d);
+				   if (validNumber > 0 ) {
+					   matrix->array[i]=d;
+					   i++;
+				   }else{
+					   fprintf(stderr,"Numero con formato incorrecto. Linea: %d\n", cantProcesos);
+					   errFill = 1;
+				   }
 				   free(token);
 				   if (i != (tam*tam)){
 					   token = readString(&errFill);
