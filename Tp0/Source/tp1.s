@@ -82,20 +82,20 @@ divu t5, t3, a1  //m1_index = (index / m1->cols) * m1->rows;
 mulo t0, t5, a0
 
 lw t5, 14($fp) //result
-add t5, t3, 8 // ¿? muy turbio
+addi t5, t3, 8 // ¿? muy turbio
 li t5, zero  //result->array[index]=0;
 
 b second_for
 
 second_for:
 //for (m2_aux = 0; m2_aux < m2->rows;) {
-add t6, a1, 4 // t6 = m2->rows
+addi t6, a1, 4 // t6 = m2->rows
 bge t2, t6, exit_second_for
 
 
 
 exit_second_for:
-add t3, t3, 1 //index ++
+addi t3, t3, 1 //index ++
 
 
 exit_first_for:
