@@ -8,7 +8,7 @@ int cantProcesos = 1;
 typedef struct matrix {
 	size_t rows;
 	size_t cols;
-	double *array;
+	float *array;
 } matrix_t;
 
 // Constructor de matrix_t
@@ -16,7 +16,10 @@ matrix_t* create_matrix(size_t rows, size_t cols) {
 	matrix_t* matrix = malloc(sizeof(matrix_t));
 	matrix->rows = rows;
 	matrix->cols = cols;
-	matrix->array = malloc(rows * cols * sizeof(double) + 4);
+	matrix->array = (float*)calloc(rows * cols, sizeof(float));
+	if (matrix->array == NULL){
+		return NULL;
+	}
 	return matrix;
 }
 
