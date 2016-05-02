@@ -150,7 +150,7 @@ add v0, zero, t0
 #destruyo el stack frame
 lw gp, 24(sp)
 lw $fp, 28(sp)
-addu sp, sp, 40
 lw ra, 32(sp)
+addu sp, sp, 40
 j ra
 .end matrix_multiply
