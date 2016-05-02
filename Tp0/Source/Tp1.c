@@ -4,6 +4,8 @@
 #include <string.h>
 #include <math.h>
 
+#define MAX_LONG 20
+
 extern int mystrlen(char* s);
 
 int cantProcesos = 1;
@@ -45,10 +47,10 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	while (i < (m->cols) * (m->cols)) {
 		fprintf(fp, "%f ", m->array[i]);
 		//
-		char* strNum=NULL;
+		char strNum [MAX_LONG];
 		float flNum = m->array[i];
 		fprintf(fp, "numero float: %f\n",flNum);
-		//sprintf(strNum, "%f", flNum);
+		sprintf(strNum, "%f", flNum);
 		fprintf(fp, "numero string: %s\n",strNum);
 		fprintf(fp, "largo del string: %d\n",mystrlen(strNum));
 		//
