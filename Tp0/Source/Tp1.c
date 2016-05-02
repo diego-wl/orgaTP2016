@@ -205,7 +205,7 @@ int main(int argc, char **argv) {
 			fillMatrix(n,matrix_b, &err);
 		}
 		if (!err){
-			//matrix_c = matrix_multiply(matrix_a,matrix_b);
+			matrix_c = create_matrix(n,n);
 			matrix_multiply(matrix_a, matrix_b, matrix_c);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };

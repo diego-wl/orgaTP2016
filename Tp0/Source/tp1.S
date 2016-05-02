@@ -74,7 +74,7 @@ lw t1, 4($fp) 				#m2_index
 lw t2, 8($fp) 				#m2_aux
 lw t3, 12($fp) 				#index
 
-mulo t4, a0, a1				#rows * cols
+mul t4, a0, a1				#rows * cols
 
 bgt t0,t4, exit_first_for #si m1_index es mayor que (rows * cols) finalizo el loop
 
@@ -123,7 +123,7 @@ sw t2, 8($fp)
 addi t0, t0, 1 				#m1_index++
 sw t0, 0($fp)
 
-lw t0, 18($fp) 				#m2->rows
+lw t0, 44($fp) 				#m2->rows
 add t1, t1, t0 				#m2_index += m2->rows;
 sw t1, 4($fp)
 
@@ -136,7 +136,7 @@ sw t3, 12($fp)
 #div $rs, $rt R 0/26 Lo = $rs / $rt, Hi = $rs mod $rt
 #mfhi $rd R 0/16 $rd = Hi Get value of Hi
 #m2_index = index % m2->cols;
-lw t1, 18($fp)
+lw t1, 44($fp)
 addi t1, t1, 4 				#m2->cols;
 div t0, t3, t1
 mfhi t0
