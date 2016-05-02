@@ -6,7 +6,7 @@
 
 #define MAX_LONG 20
 
-extern int print_matrix(int fp, char* s);
+extern int print_string(int fp, char* s);
 
 int cantProcesos = 1;
 
@@ -44,12 +44,12 @@ void destroy_matrix(matrix_t* m) {
 int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
 	char strNum [MAX_LONG];
-	char spc = " ";
+	char* spc = " \0";
 
 	int intCol = (int) (m->cols);
-	sprintf(strNum, "%d", intCol);
+	sprintf(strNum, "%d ", intCol);
 	print_string(fileno(fp),strNum);
-	print_string(fileno(fp),&spc);
+	//print_string(fileno(fp),spc);
 	//fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
 		//fprintf(fp, "%f ", m->array[i]);
@@ -59,7 +59,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 		sprintf(strNum, "%f", flNum);
 		//fprintf(fp, "numero string: %s\n",strNum);
 		print_string(fileno(fp),strNum);
-		print_string(fileno(fp),&spc);
+		print_string(fileno(fp),spc);
 		//
 		i++;
 	}

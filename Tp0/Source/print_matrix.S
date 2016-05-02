@@ -34,17 +34,16 @@ print_string:
 	# salvo 1er arg (siempre)
 	sw	a0, 40($fp)	#file descriptor
 	sw	a1, 44($fp)	#char* a string
-	move t0, a0 #t0 -> file descriptor
-	move t1, a1 # t1 -> char*
 
-	move a0, t1	# traigo char* a a0 para entrada de mystrlen
+bpsc1:
+	move a0, a1	# traigo char* a a0 para entrada de mystrlen
 	#obtengo largo del string mystrlen
 	la	t9, mystrlen	# mystrlen(name[r])
 	jal	ra, t9
 	#guardo resultado e LRA
 	sw 	v0, 16($fp)
 
-bpsc:
+bpsc2:
 	# cargo argumentos y nro de syscall
 	lw      a2, 16($fp) # t2 -> cantidad de caracteres a imprimir
 	lw	    a1, 44($fp)
