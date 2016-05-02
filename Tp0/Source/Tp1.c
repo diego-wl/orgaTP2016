@@ -45,14 +45,15 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
 	fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
-		fprintf(fp, "%f ", m->array[i]);
+		//fprintf(fp, "%f ", m->array[i]);
 		//
 		char strNum [MAX_LONG];
+
 		float flNum = m->array[i];
 		fprintf(fp, "numero float: %f\n",flNum);
 		sprintf(strNum, "%f", flNum);
 		fprintf(fp, "numero string: %s\n",strNum);
-		fprintf(fp, "largo del string: %d\n",mystrlen(strNum));
+		print_string(fp,strNum);
 		//
 		i++;
 	}
