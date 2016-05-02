@@ -68,7 +68,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	return result;
 }*/
 
-extern void multiplyMatrices(matrix_t* m1, matrix_t* m2,matrix_t* m3);
+extern void matrix_multiply(matrix_t* m1, matrix_t* m2,matrix_t* m3);
 
 void show_help(){
 	printf("Usage:\n");
