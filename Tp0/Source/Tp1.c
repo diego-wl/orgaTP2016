@@ -45,7 +45,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 }
 
 // Multiplica las matrices en m1 y m2
-matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
+/*matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
 	int m1_index = 0;
 	int m2_index = 0;
 	int m2_aux = 0;
@@ -66,7 +66,9 @@ matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
 		m2_aux = 0;
 	}
 	return result;
-}
+}*/
+
+extern void multiplyMatrices(matrix_t* m1, matrix_t* m2,matrix_t* m3);
 
 void show_help(){
 	printf("Usage:\n");
@@ -203,7 +205,8 @@ int main(int argc, char **argv) {
 			fillMatrix(n,matrix_b, &err);
 		}
 		if (!err){
-			matrix_c = matrix_multiply(matrix_a,matrix_b);
+			//matrix_c = matrix_multiply(matrix_a,matrix_b);
+			matrix_multiply(matrix_a,matrix_b,matrix_c);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
 		}

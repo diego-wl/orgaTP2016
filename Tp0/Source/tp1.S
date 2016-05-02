@@ -69,22 +69,22 @@ add a1, a0, 4 #a1 = cols
 
 first_for:
 #for (m1_index = 0; m1_index <= m1->rows * m1->cols;)
-lw t0, 0($fp) #m1_index
-lw t1, 4($fp) #m2_index
-lw t2, 8($fp) #m2_aux
-lw t3, 12($fp) #index
+lw t0, 0($fp) 				#m1_index
+lw t1, 4($fp) 				#m2_index
+lw t2, 8($fp) 				#m2_aux
+lw t3, 12($fp) 				#index
 
-mulo t4, a0, a1 #rows * cols
+mulo t4, a0, a1				#rows * cols
 
 bgt t0,t4, exit_first_for #si m1_index es mayor que (rows * cols) finalizo el loop
 
 #m1_index = (index / m1->cols) * m1->rows;
-divu t5, t3, a1  #m1_index = (index / m1->cols) * m1->rows;
+divu t5, t3, a1  			#m1_index = (index / m1->cols) * m1->rows;
 mulo t0, t5, a0
-sw t1, 0($fp) //guardo m1_index
+sw t1, 0($fp) 				#guardo m1_index
 
 #result->array[index]=0;
-lw t5, 48($fp) #result
+lw t5, 48($fp) 				#result
 sll t0, t3, 2
 addi t0, 8
 add t5, t5, t0
@@ -93,43 +93,43 @@ b second_for
 
 second_for:
 #for (m2_aux = 0; m2_aux < m2->rows;) {
-lw a1, 44($fp) #recupero m2
-addi t6, a1, 4 # t6 = m2->rows
+lw a1, 44($fp) 				#recupero m2
+addi t6, a1, 4 				# t6 = m2->rows
 bge t2, t6, exit_second_for
 b multiply
 
 multiply:
 #result->array[index] += m1->array[m1_index] * m2->array[m2_index];
-lw t0, 0($fp) #m1_index
-lw t1, 4($fp) #m2_index
-lw t2, 8($fp) #m2_aux
-lw t3, 12($fp) #index
+lw t0, 0($fp) 				#m1_index
+lw t1, 4($fp) 				#m2_index
+lw t2, 8($fp) 				#m2_aux
+lw t3, 12($fp) 				#index
 
 sll t4, t0, 2
 addi t4, 8
-add t4, a0, t4  #m1->array[m1_index]
+add t4, a0, t4  			#m1->array[m1_index]
 l.s $f12, 0(t4)
 
 sll t6, t1, 2
 addi t6, 8
-add t6, a1, t6  #m2->array[m2_index]
+add t6, a1, t6  			#m2->array[m2_index]
 l.s $f14, 0(t6)
 
-mul.s $f2, $f12, $f14 #m1->array[m1_index] * m2->array[m2_index]
+mul.s $f2, $f12, $f14 		#m1->array[m1_index] * m2->array[m2_index]
 s.s $f2, 0(t5)
 
-addi t2, t2, 1 #m2_aux++
+addi t2, t2, 1 				#m2_aux++
 sw t2, 8($fp)
-addi t0, t0, 1 #m1_index++
+addi t0, t0, 1 				#m1_index++
 sw t0, 0($fp)
 
-lw t0, 18($fp) #m2->rows
-add t1, t1, t0 #m2_index += m2->rows;
+lw t0, 18($fp) 				#m2->rows
+add t1, t1, t0 				#m2_index += m2->rows;
 sw t1, 4($fp)
 
 
 exit_second_for:
-lw t3, 12($fp) #index
+lw t3, 12($fp) 				#index
 addi t3, 1
 sw t3, 12($fp)
 
@@ -137,15 +137,15 @@ sw t3, 12($fp)
 #mfhi $rd R 0/16 $rd = Hi Get value of Hi
 #m2_index = index % m2->cols;
 lw t1, 18($fp)
-addi t1, t1, 4 #m2->cols;
+addi t1, t1, 4 				#m2->cols;
 div t0, t3, t1
 mfhi t0
-sw t0, 4($fp) #piso el valor de m2_index
-sw zero, 8($fp) #m2_aux=0
+sw t0, 4($fp) 				#piso el valor de m2_index
+sw zero, 8($fp) 			#m2_aux=0
 
 exit_first_for:
 #guardo el valor de retorno
-lw t0, 48($fp) #result
+lw t0, 48($fp) 				#result
 add v0, zero, t0
 #destruyo el stack frame
 lw gp, 24(sp)
