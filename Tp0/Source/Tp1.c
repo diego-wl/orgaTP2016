@@ -68,7 +68,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	return result;
 }*/
 
-extern void matrix_multiply(matrix_t* m1, matrix_t* m2,matrix_t* m3);
+extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
 
 void show_help(){
 	printf("Usage:\n");
@@ -206,7 +206,7 @@ int main(int argc, char **argv) {
 		}
 		if (!err){
 			//matrix_c = matrix_multiply(matrix_a,matrix_b);
-			matrix_multiply(matrix_a,matrix_b,matrix_c);
+			matrix_multiply(matrix_a, matrix_b, matrix_c);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
 		}
