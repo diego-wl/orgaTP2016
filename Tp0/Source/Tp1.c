@@ -4,7 +4,7 @@
 #include <string.h>
 #include <math.h>
 
-extern int mystrlen(const char* s);
+extern int mystrlen(char* s);
 
 int cantProcesos = 1;
 
@@ -44,10 +44,14 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
 		fprintf(fp, "%f ", m->array[i]);
+		//
 		char* strNum=NULL;
 		float flNum = m->array[i];
-		sprintf(strNum, "%f", flNum);
+		fprintf(fp, "numero float: %f\n",flNum);
+		//sprintf(strNum, "%f", flNum);
+		fprintf(fp, "numero string: %s\n",strNum);
 		fprintf(fp, "largo del string: %d\n",mystrlen(strNum));
+		//
 		i++;
 	}
 	fprintf(fp, "\n");
