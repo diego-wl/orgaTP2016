@@ -50,9 +50,9 @@ int print_matrix(FILE* fp, matrix_t* m) {
 		char strNum [MAX_LONG];
 
 		float flNum = m->array[i];
-		fprintf(fp, "numero float: %f\n",flNum);
+		//fprintf(fp, "numero float: %f\n",flNum);
 		sprintf(strNum, "%f", flNum);
-		fprintf(fp, "numero string: %s\n",strNum);
+		//fprintf(fp, "numero string: %s\n",strNum);
 		print_string(fp,strNum);
 		//
 		i++;
