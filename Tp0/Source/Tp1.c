@@ -5,6 +5,8 @@
 
 #define MAX_LONG 20
 
+extern int print_string(int fp, char* s);
+
 int cantProcesos = 1;
 
 typedef struct matrix {
@@ -12,6 +14,8 @@ typedef struct matrix {
 	size_t cols;
 	float *array;
 } matrix_t;
+
+extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
 
 // Constructor de matrix_t
 matrix_t* create_matrix(size_t rows, size_t cols) {
@@ -98,9 +102,6 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	}
 	return result;
 }*/
-extern int print_string(int fp, char* s);
-
-extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
 
 void show_help(){
 	printf("Usage:\n");
