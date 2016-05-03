@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LONG 20
+
 int cantProcesos = 1;
 
 typedef struct matrix {
@@ -33,7 +35,7 @@ void destroy_matrix(matrix_t* m) {
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
-int print_matrix(FILE* fp, matrix_t* m) {
+/*int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
 	fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
@@ -42,7 +44,36 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	}
 	fprintf(fp, "\n");
 	return 0;
+}*/
+
+// Imprime matrix_t sobre el file pointer fp en el formato solicitado
+// por el enunciado
+int print_matrix(FILE* fp, matrix_t* m) {
+	int i = 0;
+	char strNum [MAX_LONG];
+	char* spc = " \0";
+
+	int intCol = (int) (m->cols);
+	sprintf(strNum, "%d ", intCol);
+	print_string(fileno(fp),strNum);
+	//print_string(fileno(fp),spc);
+	//fprintf(fp, "%d ", (int) (m->cols));
+	while (i < (m->cols) * (m->cols)) {
+		//fprintf(fp, "%f ", m->array[i]);
+		//
+		float flNum = m->array[i];
+		//fprintf(fp, "numero float: %f\n",flNum);
+		sprintf(strNum, "%f", flNum);
+		//fprintf(fp, "numero string: %s\n",strNum);
+		print_string(fileno(fp),strNum);
+		print_string(fileno(fp),spc);
+		//
+		i++;
+	}
+	fprintf(fp, "\n");
+	return 0;
 }
+
 
 // Multiplica las matrices en m1 y m2
 /*matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
@@ -67,6 +98,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	}
 	return result;
 }*/
+extern int print_string(int fp, char* s);
 
 extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
 
