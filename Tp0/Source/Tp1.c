@@ -2,9 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-
-extern int mystrlen(const char* s);
 
 int cantProcesos = 1;
 
@@ -34,9 +31,6 @@ void destroy_matrix(matrix_t* m) {
 	m=NULL;
 }
 
-
-
-
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m) {
@@ -44,16 +38,11 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
 		fprintf(fp, "%f ", m->array[i]);
-		char* strNum=NULL;
-		float flNum = m->array[i];
-		sprintf(strNum, "%f", flNum);
-		fprintf(fp, "largo del string: %d\n",mystrlen(strNum));
 		i++;
 	}
 	fprintf(fp, "\n");
 	return 0;
 }
-
 
 // Multiplica las matrices en m1 y m2
 /*matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
