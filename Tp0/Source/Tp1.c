@@ -20,6 +20,9 @@ extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
 // Constructor de matrix_t
 matrix_t* create_matrix(size_t rows, size_t cols) {
 	matrix_t* matrix = malloc(sizeof(matrix_t));
+	if(matrix == NULL){
+		return NULL;
+	}
 	matrix->rows = rows;
 	matrix->cols = cols;
 	matrix->array = (float*)calloc(rows * cols, sizeof(float));
@@ -39,19 +42,6 @@ void destroy_matrix(matrix_t* m) {
 
 // Imprime matrix_t sobre el file pointer fp en el formato solicitado
 // por el enunciado
-/*int print_matrix(FILE* fp, matrix_t* m) {
-	int i = 0;
-	fprintf(fp, "%d ", (int) (m->cols));
-	while (i < (m->cols) * (m->cols)) {
-		fprintf(fp, "%f ", m->array[i]);
-		i++;
-	}
-	fprintf(fp, "\n");
-	return 0;
-}*/
-
-// Imprime matrix_t sobre el file pointer fp en el formato solicitado
-// por el enunciado
 int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
 	char strNum [MAX_LONG];
@@ -60,48 +50,16 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	int intCol = (int) (m->cols);
 	sprintf(strNum, "%d ", intCol);
 	print_string(fileno(fp),strNum);
-	//print_string(fileno(fp),spc);
-	//fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
-		//fprintf(fp, "%f ", m->array[i]);
-		//
 		float flNum = m->array[i];
-		//fprintf(fp, "numero float: %f\n",flNum);
 		sprintf(strNum, "%f", flNum);
-		//fprintf(fp, "numero string: %s\n",strNum);
 		print_string(fileno(fp),strNum);
 		print_string(fileno(fp),spc);
-		//
 		i++;
 	}
 	fprintf(fp, "\n");
 	return 0;
 }
-
-
-// Multiplica las matrices en m1 y m2
-/*matrix_t* matrix_multiply(matrix_t* m1, matrix_t* m2) {
-	int m1_index = 0;
-	int m2_index = 0;
-	int m2_aux = 0;
-	int index = 0;
-	matrix_t* result = create_matrix(m1->rows, m1->cols);
-
-	for (index = 0; index < m1->rows * m1->cols;) {
-		m1_index = (index / m1->cols) * m1->rows;
-		result->array[index]=0;
-		for (m2_aux = 0; m2_aux < m2->rows;) {
-			result->array[index] += m1->array[m1_index] * m2->array[m2_index];
-			m2_aux++;
-			m1_index++;
-			m2_index += m2->rows;
-		}
-		index++;
-		m2_index = index % m2->cols;
-		m2_aux = 0;
-	}
-	return result;
-}*/
 
 void show_help(){
 	printf("Usage:\n");
@@ -239,7 +197,6 @@ int main(int argc, char **argv) {
 		}
 		if (!err){
 			matrix_c = create_matrix(n,n);
-//			printf("valor matriz: %f", (float) matrix_a->array[0]);
 			matrix_multiply(matrix_a, matrix_b, matrix_c);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
