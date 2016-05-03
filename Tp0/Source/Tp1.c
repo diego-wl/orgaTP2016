@@ -57,7 +57,9 @@ int print_matrix(FILE* fp, matrix_t* m) {
 		print_string(fileno(fp),spc);
 		i++;
 	}
-	fprintf(fp, "\n");
+	spc = "\n\0";
+	print_string(fileno(fp),spc);
+	//fprintf(fp, "\n");
 	return 0;
 }
 
