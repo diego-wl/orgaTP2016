@@ -52,7 +52,7 @@ int print_matrix(FILE* fp, matrix_t* m) {
 	int index = 0;
 	matrix_t* result = create_matrix(m1->rows, m1->cols);
 
-	for (m1_index = 0; m1_index <= m1->rows * m1->cols;) {
+	for (index = 0; index < m1->rows * m1->cols;) {
 		m1_index = (index / m1->cols) * m1->rows;
 		result->array[index]=0;
 		for (m2_aux = 0; m2_aux < m2->rows;) {
@@ -206,6 +206,7 @@ int main(int argc, char **argv) {
 		}
 		if (!err){
 			matrix_c = create_matrix(n,n);
+//			printf("valor matriz: %f", (float) matrix_a->array[0]);
 			matrix_multiply(matrix_a, matrix_b, matrix_c);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
