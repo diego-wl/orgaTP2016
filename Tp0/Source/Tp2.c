@@ -15,7 +15,28 @@ typedef struct matrix {
 	float *array;
 } matrix_t;
 
-extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
+//extern void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* m3);
+void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* mr, int bs) {
+	size_t n, en, i, j, k, kk, jj;
+	double sum;
+	double m1e, m2e;
+
+	n = m1->rows;
+	en = bs*(n/bs);
+
+	for(kk=0; kk<en; kk+=bs)
+		for(jj=0; jj<en; jj+=bs)
+			for(i=0; i<n; i++)
+				for(j=jj; j<jj+bs; j++) {
+					sum = mr->array[i*n+j];
+					for(k=kk; k<kk+bs; k++) {
+						m1e = m1->array[i*n+k];
+						m2e = m2->array[k*n+j];
+						sum += m1e * m2e;
+					}
+					mr->array[i*n+j] = sum;
+				}
+}
 
 // Constructor de matrix_t
 matrix_t* create_matrix(size_t rows, size_t cols) {
@@ -199,7 +220,7 @@ int main(int argc, char **argv) {
 		}
 		if (!err){
 			matrix_c = create_matrix(n,n);
-			matrix_multiply(matrix_a, matrix_b, matrix_c);
+			matrix_multiply(matrix_a, matrix_b, matrix_c, n);
 			print_matrix(stdout, matrix_c);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
 		}
