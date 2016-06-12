@@ -65,22 +65,12 @@ void destroy_matrix(matrix_t* m) {
 // por el enunciado
 int print_matrix(FILE* fp, matrix_t* m) {
 	int i = 0;
-	char strNum [MAX_LONG];
-	char* spc = " \0";
-
-	int intCol = (int) (m->cols);
-	sprintf(strNum, "%d ", intCol);
-	print_string(fileno(fp),strNum);
+	fprintf(fp, "%d ", (int) (m->cols));
 	while (i < (m->cols) * (m->cols)) {
-		float flNum = m->array[i];
-		sprintf(strNum, "%f", flNum);
-		print_string(fileno(fp),strNum);
-		print_string(fileno(fp),spc);
+		fprintf(fp, "%f ", m->array[i]);
 		i++;
 	}
-	spc = "\n\0";
-	print_string(fileno(fp),spc);
-	//fprintf(fp, "\n");
+	fprintf(fp, "\n");
 	return 0;
 }
 
