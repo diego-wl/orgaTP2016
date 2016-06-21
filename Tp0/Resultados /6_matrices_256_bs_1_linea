@@ -1,0 +1,67 @@
+==10210== Cachegrind, a cache and branch-prediction profiler
+==10210== Copyright (C) 2002-2013, and GNU GPL'd, by Nicholas Nethercote et al.
+==10210== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==10210== Command: ./Tp2
+==10210== 
+--10210-- warning: L3 cache found, using its data for the LL simulation.
+==10210== 
+==10210== I   refs:      6,625,842,349
+==10210== I1  misses:        2,930,143
+==10210== LLi misses:            1,352
+==10210== I1  miss rate:          0.04%
+==10210== LLi miss rate:          0.00%
+==10210== 
+==10210== D   refs:      3,391,856,656  (2,664,746,947 rd   + 727,109,709 wr)
+==10210== D1  misses:        1,717,600  (    1,627,398 rd   +      90,202 wr)
+==10210== LLd misses:           27,169  (        8,112 rd   +      19,057 wr)
+==10210== D1  miss rate:           0.0% (          0.0%     +         0.0%  )
+==10210== LLd miss rate:           0.0% (          0.0%     +         0.0%  )
+==10210== 
+==10210== LL refs:           4,647,743  (    4,557,541 rd   +      90,202 wr)
+==10210== LL misses:            28,521  (        9,464 rd   +      19,057 wr)
+==10210== LL miss rate:            0.0% (          0.0%     +         0.0%  )
+
+
+
+--------------------------------------------------------------------------------
+I1 cache:         32768 B, 64 B, 4-way associative
+D1 cache:         32768 B, 64 B, 8-way associative
+LL cache:         3145728 B, 64 B, 12-way associative
+Command:          ./Tp2
+Data file:        cachegrind.out.10210
+Events recorded:  Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Events shown:     Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Event sort order: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw
+Thresholds:       0.1 100 100 100 100 100 100 100 100
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+           Ir      I1mr  ILmr            Dr      D1mr  DLmr          Dw   D1mw   DLmw 
+--------------------------------------------------------------------------------
+6,625,842,349 2,930,143 1,352 2,664,746,947 1,627,398 8,112 727,109,709 90,202 19,057  PROGRAM TOTALS
+
+
+
+           42    7    1           0       0     0          36      5      0  void matrix_multiply(matrix_t* m1, matrix_t* m2, matrix_t* mr, int bs) {
+            .    .    .           .       .     .           .      .      .  	size_t n, en, i, j, k, kk, jj;
+            .    .    .           .       .     .           .      .      .  	double sum;
+            .    .    .           .       .     .           .      .      .  	double m1e, m2e;
+            .    .    .           .       .     .           .      .      .  
+           18    0    0          12       6     0           6      0      0  	n = m1->rows;
+           54    0    0          18       0     0           6      0      0  	en = bs*(n/bs);
+            .    .    .           .       .     .           .      .      .  
+          606    2    2         396       0     0           6      0      0  	for(kk=0; kk<en; kk+=bs)
+        9,696    0    0       6,336       0     0          96      0      0  		for(jj=0; jj<en; jj+=bs)
+    1,580,544    0    0   1,182,720       0     0       1,536      0      0  			for(i=0; i<n; i++)
+   47,579,136    1    1  26,738,688       0     0     393,216      0      0  				for(j=jj; j<jj+bs; j++) {
+   81,788,928    6    1  37,748,736 786,351 6,081   6,291,456      0      0  					sum = mr->array[i*n+j];
+  761,266,176    1    1 427,819,008       0     0   6,291,456      0      0  					for(k=kk; k<kk+bs; k++) {
+1,308,622,848    6    1 603,979,776 786,353     0 100,663,296      0      0  						m1e = m1->array[i*n+k];
+1,308,622,848    0    0 603,979,776  25,812     0 100,663,296      0      0  						m2e = m2->array[k*n+j];
+  503,316,480    0    0 301,989,888       0     0 100,663,296      0      0  						sum += m1e * m2e;
+            .    .    .           .       .     .           .      .      .  					}
+   75,497,472    0    0  37,748,736       0     0   6,291,456      0      0  					mr->array[i*n+j] = sum;
+            .    .    .           .       .     .           .      .      .  				}
+           18    0    0          18       0     0           0      0      0  }
