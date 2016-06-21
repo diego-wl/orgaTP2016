@@ -2,10 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_LONG 20
-
-extern int print_string(int fp, char* s);
 
 int cantProcesos = 1;
 
@@ -179,6 +178,13 @@ void fillMatrix(int tam, matrix_t *matrix, int* err) {
 			   if (errFill){ *err = errFill; };
 }
 
+void print_time(struct timespec* ts, char* text, int proceso) {
+	clock_gettime(CLOCK_REALTIME, ts);
+	printf("%s - linea %d",text,proceso);
+	printf(" - seconds %d ; nanoseconds %ld \n", ts->tv_sec, ts->tv_nsec);
+}
+
+
 int main(int argc, char **argv) {
 
 	if (argc > 1) {
@@ -194,12 +200,14 @@ int main(int argc, char **argv) {
 			return 0;
 		};
 	}
+	struct timespec ts;
 
 	matrix_t* matrix_a=NULL;
 	matrix_t* matrix_b=NULL;
 	matrix_t* matrix_c=NULL;
 	int continuar = 1;
 	int err = 0;
+	print_time(&ts, "inicio linea ",cantProcesos);
 	size_t n = leerTamanio(&continuar,&err);
 	while(continuar && !err){
 		matrix_a = create_matrix(n,n);
@@ -210,8 +218,11 @@ int main(int argc, char **argv) {
 		}
 		if (!err){
 			matrix_c = create_matrix(n,n);
+			print_time(&ts, "inicio multiplicacion ",cantProcesos);
 			matrix_multiply(matrix_a, matrix_b, matrix_c, n);
+			print_time(&ts, "fin multiplicacion ",cantProcesos);
 			print_matrix(stdout, matrix_c);
+			print_time(&ts, "fin linea ",cantProcesos);
 			if (matrix_c != NULL) { destroy_matrix(matrix_c); };
 		}
 		if (matrix_a != NULL) { destroy_matrix(matrix_a); };
@@ -224,5 +235,4 @@ int main(int argc, char **argv) {
 	}
 	return EXIT_SUCCESS;
 }
-
-
+//#########################################################################################################
