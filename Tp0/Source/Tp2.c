@@ -219,7 +219,7 @@ int main(int argc, char **argv) {
 		if (!err){
 			matrix_c = create_matrix(n,n);
 			print_time(&ts, "inicio multiplicacion ",cantProcesos);
-			matrix_multiply(matrix_a, matrix_b, matrix_c, 16);
+			matrix_multiply(matrix_a, matrix_b, matrix_c, n);
 			print_time(&ts, "fin multiplicacion ",cantProcesos);
 			print_matrix(stdout, matrix_c);
 			print_time(&ts, "fin linea ",cantProcesos);
