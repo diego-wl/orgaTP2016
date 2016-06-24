@@ -5,6 +5,7 @@
 #include <time.h>
 
 #define MAX_LONG 20
+#define BS 16
 
 int cantProcesos = 1;
 
@@ -207,11 +208,12 @@ int main(int argc, char **argv) {
 	matrix_t* matrix_c=NULL;
 	int continuar = 1;
 	int err = 0;
-	print_time(&ts, "inicio linea ",cantProcesos);
+
 	size_t n = leerTamanio(&continuar,&err);
 	while(continuar && !err){
 		matrix_a = create_matrix(n,n);
 		matrix_b = create_matrix(n,n);
+		print_time(&ts, "inicio linea ",cantProcesos);
 		fillMatrix(n,matrix_a, &err);
 		if (!err){
 			fillMatrix(n,matrix_b, &err);
@@ -219,7 +221,7 @@ int main(int argc, char **argv) {
 		if (!err){
 			matrix_c = create_matrix(n,n);
 			print_time(&ts, "inicio multiplicacion ",cantProcesos);
-			matrix_multiply(matrix_a, matrix_b, matrix_c, n);
+			matrix_multiply(matrix_a, matrix_b, matrix_c, BS);
 			print_time(&ts, "fin multiplicacion ",cantProcesos);
 			print_matrix(stdout, matrix_c);
 			print_time(&ts, "fin linea ",cantProcesos);
